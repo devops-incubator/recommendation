@@ -2,11 +2,11 @@ pipeline {
 
   environment {
     PROJECT = "srinag"
-    APP_NAME = "payment"
-    FE_SVC_NAME = "${APP_NAME}-frontend"
+    APP_NAME = "recommendation"
+    FE_SVC_NAME = "${APP_NAME}-recommendation"
     CLUSTER = "hipstar"
     CLUSTER_ZONE = "us-central1-c"
-    IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${env.BUILD_NUMBER}"
+    IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}"
     JENKINS_CRED = "${PROJECT}"
   }
 
@@ -30,7 +30,7 @@ spec:
     - cat
     tty: true
   - name: gcloud
-    image: gcr.io/cloud-builders/gcloud
+    image: gcr.io/stackdriver-sandbox-230822/sandbox/recommendationservice:v0.7.6
     command:
     - cat
     tty: true
@@ -63,7 +63,7 @@ spec:
       steps {
         container('kubectl') {
           sh "gcloud container clusters get-credentials hipstar --zone us-central1-c --project srinag"
-          sh "kubectl --help"
+          sh "kubectl apply -f recommendationservice.yaml"
          
         }
       }
